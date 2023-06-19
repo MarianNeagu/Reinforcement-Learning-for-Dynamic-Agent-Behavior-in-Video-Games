@@ -1,6 +1,8 @@
 behaviors:
   MoveToGoal:
     trainer_type: ppo
+    keep_checkpoints: 100
+    checkpoint_interval: 1000000
     hyperparameters:
       batch_size: 2048
       buffer_size: 8192

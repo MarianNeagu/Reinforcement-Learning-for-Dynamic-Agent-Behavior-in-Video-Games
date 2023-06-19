@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 2523659822352450054}
   - component: {fileID: 8113572501596141762}
   - component: {fileID: 3738145596853312343}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -222,9 +222,9 @@ GameObject:
   - component: {fileID: 6066226782352891306}
   - component: {fileID: 5376164958635227784}
   - component: {fileID: 3843814690113868080}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -537,9 +537,9 @@ GameObject:
   - component: {fileID: 6971924533493046716}
   - component: {fileID: 4838552908381622739}
   - component: {fileID: 6819777557490258455}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -687,9 +687,9 @@ GameObject:
   - component: {fileID: 7294348045968390083}
   - component: {fileID: 7444604499564604985}
   - component: {fileID: 4740434845143409452}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -842,7 +842,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 70e3422c8cd59264d892a3e06677baea, type: 2}
+  - {fileID: 2100000, guid: cf36e6aa3c8e9d845974b3d501a20e74, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1143,13 +1143,14 @@ MonoBehaviour:
   m_DetectableTags:
   - Door
   - Obstacle
+  - Wall
   m_RaysPerDirection: 6
   m_MaxRayDegrees: 30
   m_SphereCastRadius: 0.5
   m_RayLength: 70
   m_RayLayerMask:
     serializedVersion: 2
-    m_Bits: 4294966024
+    m_Bits: 4294967048
   m_ObservationStacks: 1
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
@@ -1323,7 +1324,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 70e3422c8cd59264d892a3e06677baea, type: 2}
+  - {fileID: 2100000, guid: cf36e6aa3c8e9d845974b3d501a20e74, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1749,11 +1750,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02474427a2635f6479b0a1b1e4f3c5fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoV: {fileID: 0}
-  transparencyValue: 0.2
-  visionArc: {fileID: 0}
-  lineObject: {fileID: 0}
-  lineRenderer: {fileID: 0}
+  transparencyValue: 0.095
+  lineWidthStart: 0.2
+  lineWidthEnd: 0.1
+  fovMat: {fileID: 2100000, guid: 70e3422c8cd59264d892a3e06677baea, type: 2}
+  lineMat: {fileID: 2100000, guid: 161c959cb4c96cf4ba43e78c642c207a, type: 2}
 --- !u!114 &3063436247784517866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1806,7 +1807,9 @@ MonoBehaviour:
   enableMoveOfAgent: 1
   enableObstacle: 0
   enableRotationOfAgent: 1
-  agentAndTargetInRandomPlaces: 1
+  targetSpawnRandomly: 0
+  agentSpawnRandomly: 0
+  agentAndTargetInRandomSides: 0
   moveTargetRandomly: 0
   moveTargetOnOneAxis: 1
   moveTargetOnZ: 1

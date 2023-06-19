@@ -5,39 +5,46 @@ using UnityEngine;
 
 public class DrawFieldOfView : MonoBehaviour
 {
+    [SerializeField]
+    [Range(0.0f, 1.0f)]
+    private float transparencyValue = 0.1f; // 0 = completely transparent; 1 = completely opaque
+    [SerializeField]
+    private float lineWidthStart = 0.25f;
+    [SerializeField]
+    private float lineWidthEnd = 0.25f;
 
-    [SerializeField]
     private EnemyFieldOfView FoV;
-    [SerializeField]
-    private float transparencyValue = 0.5f; // 0 = completely transparent; 1 = completely opaque
-    [SerializeField]
     private GameObject visionArc;
-    [SerializeField]
     private GameObject lineObject;
-    [SerializeField]
     private LineRenderer lineRenderer;
+    [SerializeField]
+    private Material fovMat;
+    [SerializeField]
+    private Material lineMat;
 
     void Start()
     {
         FoV = GetComponent<EnemyFieldOfView>();
-
         if (FoV == null)
         {
+            Debug.LogError("FoV can't be null!");
+            return;
+        }
+        if(fovMat == null)
+        {
+            Debug.LogError("TransparentMat can't be null!");
             return;
         }
 
-        Material transparentMat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-        
-        transparentMat.SetFloat("_Surface", 1.0f);
-        transparentMat.SetFloat("_DstBlendAlpha", 10f);
-        transparentMat.SetFloat("_DstBlend", 10f);
-        transparentMat.color = new Color(1, 1, 1, transparencyValue);
+        fovMat.color = new Color(1, 1, 1, transparencyValue);
 
         visionArc = new GameObject("FoV_Arc");
-        visionArc.transform.position = FoV.transform.position;
+        visionArc.transform.position = new (FoV.transform.position.x, FoV.transform.position.y + 0.4385f, FoV.transform.position.z);
         MeshFilter mFilter = visionArc.AddComponent<MeshFilter>();
         MeshRenderer mRenderer = visionArc.AddComponent<MeshRenderer>();
-        mRenderer.material = transparentMat;
+        mRenderer.material = fovMat;
+
+
 
         Mesh filledArc = new Mesh();
         BuildArcMesh(filledArc, FoV.GetViewAngle(), FoV.GetViewRadius(), 100);
@@ -45,29 +52,27 @@ public class DrawFieldOfView : MonoBehaviour
 
         visionArc.layer = LayerMask.NameToLayer("Ignore Raycast");
 
-
-        Material redMat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-        redMat.color = new Color(1, 0, 0, 1);
-
         lineObject = new GameObject("LineObject");
         lineRenderer = lineObject.AddComponent<LineRenderer>();
-        lineRenderer.material = redMat;
-        lineRenderer.startWidth = 0.5f;
-        lineRenderer.endWidth = 0.5f;
+        lineRenderer.material = lineMat;
+        lineRenderer.startWidth = lineWidthStart;
+        lineRenderer.endWidth = lineWidthEnd;
         lineRenderer.positionCount = 2;
         lineRenderer.enabled = false;
-        
+
+
+
     }
 
-    void Update()
+    void LateUpdate()
     {
-        visionArc.transform.position = FoV.transform.position;
+        visionArc.transform.position = new(FoV.transform.position.x, FoV.transform.position.y + 0.4385f, FoV.transform.position.z);
         visionArc.transform.rotation = FoV.transform.rotation;
         if(FoV.GetVisibleTarget() != null)
         {
             lineRenderer.enabled = true;
-            lineRenderer.SetPosition(0, FoV.transform.position);
-            lineRenderer.SetPosition(1, FoV.GetVisibleTarget().position);
+            lineRenderer.SetPosition(0, new(FoV.transform.position.x, FoV.transform.position.y + 0.439f, FoV.transform.position.z));
+            lineRenderer.SetPosition(1, new (FoV.GetVisibleTarget().position.x, FoV.transform.position.y + 0.439f, FoV.GetVisibleTarget().position.z));
         }
         else
         {

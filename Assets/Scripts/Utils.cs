@@ -39,8 +39,8 @@ namespace FriedRice
     public static class MLAgentsTraining
     {
         // if random sides is false then the agent will be always on the left side
-        public static void InitializeEnvironment(Transform agentTransform, Transform targetTransform, float groundScaleX = 1, float groundScaleZ = 1, 
-            float distanceFromWall = 2f, bool randomSides = true, bool resetAgentRotation = false)
+        public static void InitializeEnvironment(Transform agentTransform, Transform agentInitialTransform, Transform targetTransform, float groundScaleX = 1, float groundScaleZ = 1, 
+            float distanceFromWall = 2f, bool randomSides = true, bool targetSpawnRandomly = false, bool agentSpawnRandomly = false, bool resetAgentRotation = false)
         {
 
             float maxPosX = groundScaleX * 5 - distanceFromWall;
@@ -51,14 +51,26 @@ namespace FriedRice
             // agent left, target right
             if (side == 0)
             {
-                agentTransform.localPosition = new Vector3(Random.Range(-maxPosX, -1f), 1f, Random.Range(-maxPosZ, maxPosZ));
-                targetTransform.localPosition = new Vector3(Random.Range(1f, maxPosX), 1f, Random.Range(-maxPosZ, maxPosZ));
+                if(agentSpawnRandomly)
+                    agentTransform.localPosition = new Vector3(Random.Range(-maxPosX, -1f), 1f, Random.Range(-maxPosZ, maxPosZ));
+                else
+                    agentTransform.localPosition = new Vector3(Random.Range(-maxPosX, -1f), 1f, agentInitialTransform.localPosition.z);
+                if (targetSpawnRandomly)
+                    targetTransform.localPosition = new Vector3(Random.Range(1f, maxPosX), 1f, Random.Range(-maxPosZ, maxPosZ));
+                else
+                    targetTransform.localPosition = new Vector3(Random.Range(1f, maxPosX), 1f, targetTransform.localPosition.z);
             }
             // agent right, target left
             else
             {
-                agentTransform.localPosition = new Vector3(Random.Range(1f, maxPosX), 1f, Random.Range(-maxPosZ, maxPosZ));
-                targetTransform.localPosition = new Vector3(Random.Range(-maxPosX, -1f), 1f, Random.Range(-maxPosZ, maxPosZ));
+                if(agentSpawnRandomly)
+                    agentTransform.localPosition = new Vector3(Random.Range(1f, maxPosX), 1f, Random.Range(-maxPosZ, maxPosZ));
+                else
+                    agentTransform.localPosition = new Vector3(Random.Range(1f, maxPosX), 1f, agentInitialTransform.localPosition.z);
+                if (targetSpawnRandomly)
+                    targetTransform.localPosition = new Vector3(Random.Range(-maxPosX, -1f), 1f, Random.Range(-maxPosZ, maxPosZ));
+                else
+                    targetTransform.localPosition = new Vector3(Random.Range(-maxPosX, -1f), 1f, targetTransform.localPosition.z);
             }
 
             agentTransform.localRotation = resetAgentRotation ? new Quaternion(0f, 0f, 0f, 1f): agentTransform.localRotation;

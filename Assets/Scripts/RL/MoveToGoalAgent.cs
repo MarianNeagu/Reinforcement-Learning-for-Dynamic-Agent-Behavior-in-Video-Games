@@ -19,6 +19,7 @@ public class MoveToGoalAgent : Agent
     private float moveSpeedZ;
     private float timeWhenTargetChangeAxis;
     private int axisToMoveTarget; // 1 - X, 2 - Z
+    private Transform agentInitialPosition;
 
     [SerializeField]
     private Transform targetTransform;
@@ -29,24 +30,30 @@ public class MoveToGoalAgent : Agent
     [SerializeField]
     private bool enableLogs;
 
-    [Header("Environment settings")]
+    [Header("Training settings")]
     [SerializeField]
     private bool enableMoveOfAgent;
     [SerializeField]
-    private bool enableObstacle;
+    private bool enableDoorReward;
+    [SerializeField]
+    private int episodesToChangeDoorReward;
     [SerializeField]
     private bool enableRotationOfAgent;
+    [SerializeField]
+    private bool targetSpawnRandomly;
+    [SerializeField]
+    private bool agentSpawnRandomly;
     [Tooltip("When unchecked the agent will be always on the left side")]
     [SerializeField]
-    private bool agentAndTargetInRandomPlaces;
+    private bool agentAndTargetInRandomSides;
     [SerializeField]
     private bool moveTargetRandomly;
     [SerializeField]
     private bool moveTargetOnOneAxis;
-    [Tooltip("Must be checked if moveTargetOnOneAxis is checked")]
+    [Tooltip("Must be checked only if moveTargetOnOneAxis is also checked")]
     [SerializeField]
     private bool moveTargetOnZ;
-    [Tooltip("Must be checked if moveTargetOnOneAxis is checked")]
+    [Tooltip("Must be checked only if moveTargetOnOneAxis is also checked")]
     [SerializeField]
     private bool moveTargetOnX;
     [SerializeField]
@@ -98,6 +105,7 @@ public class MoveToGoalAgent : Agent
         {
             animator = GetComponent<Animator>();
         }
+        agentInitialPosition = transform;
     }
 
     public override void OnEpisodeBegin()
@@ -105,10 +113,11 @@ public class MoveToGoalAgent : Agent
         
         if(inTraining)
         {
+            
             SetReward(0);
 /*            agentStatus.SetEpisodeCounter(agentStatus.GetEpisodeCounter() + 1);*/
             lastTargetPosition = Vector3.zero;  
-            MLAgentsTraining.InitializeEnvironment(transform, targetTransform, groundScaleX: groundScaleX, groundScaleZ: groundScaleZ, distanceFromWall: distanceFromWall, randomSides: agentAndTargetInRandomPlaces, resetAgentRotation: false);
+            MLAgentsTraining.InitializeEnvironment(transform, agentInitialPosition, targetTransform, groundScaleX: groundScaleX, groundScaleZ: groundScaleZ, distanceFromWall: distanceFromWall, randomSides: agentAndTargetInRandomSides, targetSpawnRandomly: targetSpawnRandomly, agentSpawnRandomly: agentSpawnRandomly, resetAgentRotation: false);
             if (moveTargetRandomly)
             {
                 moveSpeedX = Random.Range(targetMinSpeed, targetMaxSpeed);
@@ -217,13 +226,13 @@ public class MoveToGoalAgent : Agent
         }
     }
 
-    /*private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Door"))
+        if (other.gameObject.CompareTag("Door") && enableDoorReward)
         {
             AddReward(30f);
-        }   
-    }*/
+        }
+    }
 
     private void OnTriggerStay(Collider other)
     {
@@ -254,7 +263,11 @@ public class MoveToGoalAgent : Agent
         {
             transform.eulerAngles = new Vector3(0f, transform.rotation.eulerAngles.y, 0f);
         }
-            
+        
+        if(CompletedEpisodes == episodesToChangeDoorReward && episodesToChangeDoorReward != 0)
+        {
+            enableDoorReward = false;
+        }
     }
 
     private void MoveTargetOnOneAxis(Transform targetTransform, float groundScaleX = 1, float groundScaleZ = 1,

@@ -9,6 +9,7 @@ TagManager:
   - Wall
   - Door
   - Obstacle
+  - Target
   layers:
   - Default
   - TransparentFX
