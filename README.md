@@ -1,5 +1,9 @@
 # Reinforcement Learning for Dynamic Agent Behavior in Video Games
 
+
+https://github.com/MarianNeagu/Reinforcement-Learning-for-Dynamic-Agent-Behavior-in-Video-Games/assets/71409464/5cd6292d-1c1e-4611-82b7-66da561d6dce
+
+
 ## Setup
 - Follow the steps [from the official guide](https://github.com/Unity-Technologies/ml-agents/blob/release_20_docs/docs/Installation.md).
 
@@ -25,3 +29,8 @@ mlagents-learn config/config.yaml --run-id=IDNAME
 ```console
 tensorboard --logdir results
 ```
+
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/71409464/251377241-84a420f4-e4a8-42e4-9bec-2e0a557f043b.png" width=100%>
+
+
+
