@@ -171,7 +171,15 @@ public class MoveToGoalAgent : Agent
         if (inTraining)
         {
             // Exponential growth of reward based of how centered is the view
-            AddReward(-Mathf.Log(Mathf.Abs(dotProduct), 5)/2.0f);
+            if(dotProduct != 0)
+            {
+                AddReward(-Mathf.Log(Mathf.Abs(dotProduct), 5) / 2.0f);
+            }
+            else
+            {
+                AddReward(4);
+            }
+            
             if(distanceBetweenAgentAndTarget != -1)
             {
                 float logBase = 1.1f;
